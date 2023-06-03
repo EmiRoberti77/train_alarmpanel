@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import { AlarmsComponent } from './componets/AlarmsComponent';
-//Hi
+// test 2
 function App() {
   return (
     <div className="App">
