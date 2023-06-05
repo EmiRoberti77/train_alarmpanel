@@ -12,7 +12,7 @@ import './css/AlarmComponent.css';
 interface AlarmData {
   date:string;
   datetime:string;
-  objectid:string;
+  object_id:string;
   w:string;
   x:string;
   h:string;
@@ -21,6 +21,10 @@ interface AlarmData {
   id:string;
   name:string;
   type:string;
+  thumbnail_url:string;
+  camera_name:string;
+  duration:number;
+  
 }
 
 
@@ -30,15 +34,16 @@ interface RowData {
   thumbnail: string;
   camera: string;
   datetime: string;
-  duration:string;
+  trainduration:number;
   trainstatus:string;
+  
 }
 
 
 // This makes up the field were datas going to be displayed 
 const columns: GridColDef[] = [
   { field: 'id', headerName: 'No', width: 70 },
-  { field: 'trainid', headerName: 'ID', width: 70 },
+  { field: 'trainid', headerName: 'ID', width: 110 },
 
   { field: 'thumbnail', 
     headerName: 'Preview', 
@@ -57,7 +62,7 @@ const columns: GridColDef[] = [
     headerName: 'Arrival Date & Time', 
     width: 200 },
   {
-    field: 'duration',
+    field: 'trainduration',
     headerName: 'Duration',
     width: 100,
   },
@@ -129,6 +134,10 @@ export const AlarmsComponent: React.FC = () => {
 
   }, []);
 
+
+
+
+
   
 
   
@@ -138,11 +147,11 @@ export const AlarmsComponent: React.FC = () => {
     // table row ID (needed for sorting)
     id: index + 1,
     // 
-    trainid: item.objectid,
-    thumbnail: 'https://www.thetimes.co.uk/imageserver/image/%2Fmethode%2Fsundaytimes%2Fprod%2Fweb%2Fbin%2F541a35de-f60d-11e6-82b6-6615ea199c33.jpg?crop=2041%2C1148%2C100%2C242&resize=1500',
-    camera: 'Camera 12',
+    trainid: item.object_id,
+    thumbnail: item.thumbnail_url,
+    camera: item.camera_name,
     datetime: item.datetime,
-    duration:item.type,
+    trainduration:item.duration,
     trainstatus:item.name,
     
   }));
