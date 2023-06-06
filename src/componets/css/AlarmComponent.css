@@ -35,6 +35,14 @@ body {
     color: white !important;
 }
 
+.css-12u49z-MuiDataGrid-root {
+    border-color: rgba(90, 90, 90, 0.893) !important;
+}
+
+.css-12u49z-MuiDataGrid-root .MuiDataGrid-withBorderColor {
+    border-color: rgba(90, 90, 90, 0.893) !important;
+}
+
 /* Dark mode End */
 
 /* If need to switch to light mode just comment the top manuelly as for now */
