@@ -94,7 +94,7 @@ const columns: GridColDef[] = [
 ];
 
 // Endpoint URL
-const endpoint = (datetime: string) => `https://xn86efpkll.execute-api.us-east-1.amazonaws.com/prod/alarms?datetime=${datetime}`;
+const endpoint = (datetime: string) => `https://amziygmw1e.execute-api.us-east-1.amazonaws.com/prod/alarms?datetime=${datetime}`;
 
 export const AlarmsComponent: React.FC = () => {
   const [data, setData] = useState<AlarmData[]>([]);
