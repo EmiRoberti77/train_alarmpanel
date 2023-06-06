@@ -69,6 +69,15 @@ body {
     color: white !important;
 }
 
+/* Borders */
+.css-1si6n65 .MuiDataGrid-withBorderColor {
+    border-color: rgb(46 46 46) !important;
+}
+
+.css-1si6n65 {
+    border-color: rgb(56, 56, 56) !important;
+}
+
 /* Dark mode End */
 
 /* If need to switch to light mode just comment the top manuelly as for now */
