@@ -130,7 +130,7 @@ export const AlarmsComponent: React.FC = () => {
     };
 
     // Alarm Condition
-    if (item.duration > 15) {
+    if (item.duration < 15) {
       row.cssClass = 'blink-row';
     }
 
