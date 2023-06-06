@@ -1,224 +1,166 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { resourceLimits } from 'worker_threads';
-import { DataGrid, GridColDef, GridValueGetterParams,GridCellParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridValueGetterParams, GridCellParams } from '@mui/x-data-grid';
 import { IconButton } from '@mui/material';
-import { Delete, Edit, Visibility } from '@mui/icons-material';
+import { Delete, Edit, PlayArrow, Visibility } from '@mui/icons-material';
 import { saveAs } from 'file-saver';
 import './css/AlarmComponent.css';
 
-
-// Interface for datas
+// Interface for data
 interface AlarmData {
-  date:string;
-  datetime:string;
-  object_id:string;
-  w:string;
-  x:string;
-  h:string;
-  y:string;
-  confidence:string;
-  id:string;
-  name:string;
-  type:string;
-  thumbnail_url:string;
-  camera_name:string;
-  duration:number;
-  
+  date: string;
+  datetime: string;
+  object_id: string;
+  w: string;
+  x: string;
+  h: string;
+  y: string;
+  confidence: string;
+  id: string;
+  name: string;
+  type: string;
+  thumbnail_url: string;
+  camera_name: string;
+  duration: number;
 }
 
-
-//Interface for rowdata
+// Interface for row data
 interface RowData {
+  id: number;
   trainid: string;
   thumbnail: string;
   camera: string;
   datetime: string;
-  trainduration:number;
-  trainstatus:string;
-  
+  trainduration: number;
+  trainstatus: string;
+  cssClass?: string;
 }
 
-
-// This makes up the field were datas going to be displayed 
+// Column definitions for the data grid
 const columns: GridColDef[] = [
-  { field: 'id', headerName: 'No', width: 70 },
-  { field: 'trainid', headerName: 'ID', width: 110 },
-
-  { field: 'thumbnail', 
-    headerName: 'Preview', 
-    width: 250,
-    
-    
-    renderCell: (params) => (
-    <img src={params.value} alt={`Thumbnail ${params.row.id}`} style={{ width: '100%', height: 'auto' }} />
-  ), },
-
-  { field: 'camera', 
-  headerName: 'Camera', 
-  width: 100},
-
-  { field: 'datetime', 
-    headerName: 'Arrival Date & Time', 
-    width: 200 },
+  { field: 'id', headerName: 'No', flex: 0.3 },
+  { field: 'trainid', headerName: 'ID', flex: 0.2 },
   {
-    field: 'trainduration',
-    headerName: 'Duration',
-    width: 100,
+    field: 'thumbnail',
+    headerName: 'Preview',
+    renderCell: (params) => (
+      <img
+        src={params.value}
+        alt={`Thumbnail ${params.row.id}`}
+        style={{ width: '100%', height: 'auto' }}
+        // ref={(img) => {
+        //   if (img) {
+        //     // Calculate the height of the thumbnail and adjust the row height
+        //     const rowElement = img.closest('.MuiDataGrid-row') as HTMLElement;
+        //     if (rowElement) {
+        //       const thumbnailHeight = img.offsetHeight;
+        //       const currentRowHeight = rowElement.offsetHeight;
+        //       if (thumbnailHeight > currentRowHeight) {
+        //         rowElement.style.height = `${thumbnailHeight}px`;
+        //       }
+        //     }
+        //   }
+        // }}
+      />
+    ),
+    flex: 0.9,
   },
-  // {
-  //   field: 'overtime',
-  //   headerName: ' Over Time',
-  //   description: 'This column has a value getter and is not sortable.',
-  //   sortable: false,
-  //   width: 250,
-  //   valueGetter: (params: GridValueGetterParams) =>
-  //     `${params.row.duration - 15 }`,
-  // },
+  { field: 'camera', headerName: 'Camera', flex: 0.7 },
+  { field: 'datetime', headerName: 'Arrival Date & Time', flex: 1.7 },
+  { field: 'trainduration', headerName: 'Duration', flex: 0.7 },
   {
     field: 'trainstatus',
-    headerName: ' Status',
+    headerName: 'Status',
     description: 'This column has a value getter and is not sortable.',
     sortable: false,
-    width: 150,
-    
+    flex: 0.8
   },
   {
     field: 'actions',
     headerName: 'Action',
     sortable: false,
-    width: 150,
     renderCell: (params: GridCellParams) => (
       <>
         <IconButton aria-label="Delete">
           <Delete />
         </IconButton>
-        <IconButton aria-label="Edit">
-          <Edit />
-        </IconButton>
-        <IconButton aria-label="Preview">
-          <Visibility />
+        <IconButton aria-label="Play">
+          <PlayArrow />
         </IconButton>
       </>
     ),
+    flex: 1
   },
 ];
 
+// Endpoint URL
+const endpoint = (datetime: string) => `https://xn86efpkll.execute-api.us-east-1.amazonaws.com/prod/alarms?datetime=${datetime}`;
 
-//Endpoints
-const endpoint = (datetime:string) => `https://xn86efpkll.execute-api.us-east-1.amazonaws.com/prod/alarms?datetime=${datetime}`;
-
-
-//grid row height
-const rowHeight = 150;
-
-
-
-
-//Main function
 export const AlarmsComponent: React.FC = () => {
-
   const [data, setData] = useState<AlarmData[]>([]);
-  const [datetime, setDatetime] = useState<string>('2023-05-29T12:00');
+  const [datetime, setDatetime] = useState<string>('');
+  const gridRef = useRef<HTMLDivElement>(null);
 
-  
-  //Fetch data to 'data'
+  const fetchData = async () => {
+    const twelveHoursAgo = new Date();
+    twelveHoursAgo.setHours(twelveHoursAgo.getHours() - 24); // set in Hrs
+    const formattedDateTime = twelveHoursAgo.toISOString();
+
+    const result = await axios.get(endpoint(formattedDateTime));
+    setData(result.data);
+  };
+
   useEffect(() => {
-    const fetchdata =  async () =>{ 
-      const result = await axios.get(endpoint(datetime));
-      console.log(result.data);
-      setData( state => result.data);
+    fetchData();
+    const interval = setInterval(fetchData, 5000); // Refresh every 5 seconds
+    return () => {
+      clearInterval(interval);
     };
-
-    fetchdata();
-
   }, []);
 
+  const rows: RowData[] = data.map((item, index) => {
+    const row: RowData = {
+      id: index + 1,
+      trainid: item.object_id,
+      thumbnail: item.thumbnail_url,
+      camera: item.camera_name,
+      datetime: item.datetime,
+      trainduration: item.duration,
+      trainstatus: item.name,
+    };
 
+    // Alarm Condition
+    if (item.duration > 15) {
+      row.cssClass = 'blink-row';
+    }
 
+    return row;
+  });
 
-
-  
-
-  
-// set rows with the datas to respective field
-  const rows: RowData[] = data.map((item,index) => ({
-    
-    // table row ID (needed for sorting)
-    id: index + 1,
-    // 
-    trainid: item.object_id,
-    thumbnail: item.thumbnail_url,
-    camera: item.camera_name,
-    datetime: item.datetime,
-    trainduration:item.duration,
-    trainstatus:item.name,
-    
-  }));
-
-
-
-  
-
-  
-// function to export the table grid as CSV
   const handleExportCsv = () => {
     const csvData = rows
       .map((row: any) => columns.map((column) => row[column.field as keyof typeof row]))
       .map((row) => row.join(','));
 
-    const csvString = [
-      columns.map((column) => column.headerName).join(','),
-      ...csvData,
-    ].join('\n');
+    const csvString = [columns.map((column) => column.headerName).join(','), ...csvData].join('\n');
 
     const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8' });
     saveAs(blob, 'data.csv');
   };
 
-  
-
-
-  
+  const rowHeight=80;
 
   return (
     <div>
-    {/* <table border={1}>
-      <thead>
-        <tr>
-          <th>Thumbnail-2</th>
-          <th>Camera</th>
-          <th>Arrival time</th>
-          <th>Status</th>
-          <th>actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item: AlarmData, index: number) => (
-          <tr key={index}>
-            <td>{item.objectid}</td>
-            <td>Camera 12</td>
-            <td>{item.datetime}</td>
-            <td>{item.type}</td>
-            <td>
-              <button>clear alarm</button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table> */}
-
-
-    {/* Button */}
-
-<div className='buttonContainer' style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem',marginTop: '1rem' }}>
-        <button className='button' onClick={handleExportCsv}>Export as CSV</button>
+      <div className="buttonContainer" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem', marginTop: '1rem' }}>
+        <button className="button" onClick={handleExportCsv}>
+          Export as CSV
+        </button>
       </div>
 
-    {/* Table */}
-    <DataGrid
+      <DataGrid
         rows={rows}
-        rowHeight={rowHeight} 
+        rowHeight={rowHeight}
         columns={columns}
         initialState={{
           pagination: {
@@ -229,6 +171,5 @@ export const AlarmsComponent: React.FC = () => {
         checkboxSelection
       />
     </div>
-    
   );
 };
