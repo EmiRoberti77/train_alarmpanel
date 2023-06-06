@@ -5,31 +5,39 @@ body {
     color: white;
 }
 
+/* Header Label Text Color */
 .css-12u49z-MuiDataGrid-root {
     color: white !important;
 }
 
+/* Checkbox color */
 .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root {
     color: white !important;
 }
 
+/* Action Button Color*/
 .css-78trlr-MuiButtonBase-root-MuiIconButton-root {
     color: white !important;
 }
 
+/* Table Page no. and manager color */
 .css-rtrcn9-MuiTablePagination-root {
     color: white !important;
 }
 
+/* Sorting Buttons colors */
 .css-1pe4mpk-MuiButtonBase-root-MuiIconButton-root {
     color: white !important;
 }
 
+/* Page no. drop down */
 .css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon {
     color: white !important;
 }
 
 /* Dark mode End */
+
+/* If need to switch to light mode just comment the top manuelly as for now */
 
 .buttonContainer {
 
