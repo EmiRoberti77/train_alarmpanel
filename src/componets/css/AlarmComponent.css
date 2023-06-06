@@ -1,3 +1,36 @@
+/* For Dark mode */
+
+body {
+    background-color: rgb(29, 29, 29);
+    color: white;
+}
+
+.css-12u49z-MuiDataGrid-root {
+    color: white !important;
+}
+
+.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root {
+    color: white !important;
+}
+
+.css-78trlr-MuiButtonBase-root-MuiIconButton-root {
+    color: white !important;
+}
+
+.css-rtrcn9-MuiTablePagination-root {
+    color: white !important;
+}
+
+.css-1pe4mpk-MuiButtonBase-root-MuiIconButton-root {
+    color: white !important;
+}
+
+.css-pqjvzy-MuiSvgIcon-root-MuiSelect-icon {
+    color: white !important;
+}
+
+/* Dark mode End */
+
 .buttonContainer {
 
     padding: 0.5rem 1rem;
