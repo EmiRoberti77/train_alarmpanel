@@ -130,11 +130,11 @@ export const AlarmsComponent: React.FC = () => {
     };
 
     // Alarm Condition
-    if (item.duration < 15) {
-      row.cssClass = 'blink-row';
-    }
+  if (item.duration === 0) {
+    row.cssClass = 'blink-row';
+  }
 
-    return row;
+  return row;
   });
 
   const handleExportCsv = () => {
@@ -162,6 +162,7 @@ export const AlarmsComponent: React.FC = () => {
         rows={rows}
         rowHeight={rowHeight}
         columns={columns}
+        getRowClassName={(params) => params.row.cssClass || ''}
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 5 },

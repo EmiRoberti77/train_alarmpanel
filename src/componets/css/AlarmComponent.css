@@ -79,13 +79,10 @@ body {
 
 /* Alarm-Blink effect */
 
-.blink-row {
-    animation: blink-animation 1s infinite;
-}
-
-@keyframes blink-animation {
+/* AlarmComponent.css */
+@keyframes blink {
     0% {
-        background-color: transparent;
+        background-color: white;
     }
 
     50% {
@@ -93,9 +90,14 @@ body {
     }
 
     100% {
-        background-color: transparent;
+        background-color: white;
     }
 }
+
+.blink-row {
+    animation: blink 1s infinite;
+}
+
 
 /* now in test  */
 /* For desktop */
