@@ -122,20 +122,20 @@ export const AlarmsComponent: React.FC = () => {
   }, []);
 
   
-  //Alarm sound Stack
-  useEffect(() => {
-    // Check for duration equal to 0 and play alarm sound
-    const alarmData = data.find((item) => item.duration === 0);
-    if (alarmData) {
-      // Play the alarm sound here
-      playAlarmSound();
-    }
-  }, [data]);
+  // //Alarm sound Stack
+  // useEffect(() => {
+  //   // Check for duration equal to 0 and play alarm sound
+  //   const alarmData = data.find((item) => item.duration === 0);
+  //   if (alarmData) {
+  //     // Play the alarm sound here
+  //     playAlarmSound();
+  //   }
+  // }, [data]);
 
-  const playAlarmSound = () => {
-    const alarmSound = new Audio('/alarm.wav');
-    alarmSound.play();
-  };
+  // const playAlarmSound = () => {
+  //   const alarmSound = new Audio('/alarm.wav');
+  //   alarmSound.play();
+  // };
 
 
   const rows: RowData[] = data.map((item, index) => {
