@@ -112,25 +112,27 @@ body {
 }
 
 
-/* Alarm-Blink effect */
-
-/* AlarmComponent.css */
 @keyframes blink {
     0% {
-        background-color: white;
-    }
-
-    50% {
         background-color: red;
     }
 
+    50% {
+        background-color: rgb(47, 47, 47);
+    }
+
     100% {
-        background-color: white;
+        background-color: red;
     }
 }
 
-.blink-row {
+
+.red-row {
     animation: blink 1s infinite;
+}
+
+.orange-row {
+    background-color: rgb(221, 118, 54);
 }
 
 

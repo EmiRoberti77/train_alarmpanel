@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import { DataGrid, GridColDef, GridValueGetterParams, GridCellParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridValueGetterParams, GridCellParams,GridRowParams } from '@mui/x-data-grid';
 import { IconButton } from '@mui/material';
 import { Delete, Edit, PlayArrow, Visibility } from '@mui/icons-material';
 import { saveAs } from 'file-saver';
@@ -33,7 +33,8 @@ interface RowData {
   datetime: string;
   trainduration: number;
   trainstatus: string;
-  cssClass?: string;
+  cssClass10?: string;
+  cssClass15?: string;
 }
 
 // Column definitions for the data grid
@@ -110,13 +111,32 @@ export const AlarmsComponent: React.FC = () => {
     setData(result.data);
   };
 
+
+  // Fetching Data in 5s Interval
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 5000); // Refresh every 5 seconds
+    const interval = setInterval(fetchData, 5000);
     return () => {
       clearInterval(interval);
     };
   }, []);
+
+  
+  //Alarm sound Stack
+  useEffect(() => {
+    // Check for duration equal to 0 and play alarm sound
+    const alarmData = data.find((item) => item.duration === 0);
+    if (alarmData) {
+      // Play the alarm sound here
+      playAlarmSound();
+    }
+  }, [data]);
+
+  const playAlarmSound = () => {
+    const alarmSound = new Audio('/alarm.wav');
+    alarmSound.play();
+  };
+
 
   const rows: RowData[] = data.map((item, index) => {
     const row: RowData = {
@@ -127,16 +147,16 @@ export const AlarmsComponent: React.FC = () => {
       datetime: item.datetime,
       trainduration: item.duration,
       trainstatus: item.name,
+      cssClass10: item.duration >10 && item.duration < 15 ? 'orange-row' : '',
+      cssClass15: item.duration >15 ? 'red-row' : '',
     };
 
-    // Alarm Condition
-  if (item.duration === 0) {
-    row.cssClass = 'blink-row';
-  }
+   
 
   return row;
   });
 
+  //To Export CSV File of the Table
   const handleExportCsv = () => {
     const csvData = rows
       .map((row: any) => columns.map((column) => row[column.field as keyof typeof row]))
@@ -148,7 +168,15 @@ export const AlarmsComponent: React.FC = () => {
     saveAs(blob, 'data.csv');
   };
 
+  // To adjust Row Height
   const rowHeight=80;
+
+  // Alarm Row Selection
+  const getRowClassName = (params: GridRowParams) => {
+    const row = params.row as RowData;
+    return row.cssClass10 || row.cssClass15 || '';
+  };
+  
 
   return (
     <div>
@@ -162,7 +190,7 @@ export const AlarmsComponent: React.FC = () => {
         rows={rows}
         rowHeight={rowHeight}
         columns={columns}
-        getRowClassName={(params) => params.row.cssClass || ''}
+        getRowClassName={getRowClassName} // Apply row CSS class
         initialState={{
           pagination: {
             paginationModel: { page: 0, pageSize: 5 },
