@@ -46,23 +46,23 @@ body {
 
 /* Cloud CSS Fix */
 .css-1si6n65 {
-    color: white;
+    color: white !important;
 }
 
 .css-zun73v {
-    color: rgb(255, 255, 255);
+    color: rgb(255, 255, 255) !important;
 }
 
 .css-vubbuv {
-    color: white;
+    color: white !important;
 }
 
 .css-1chpzqh {
-    color: white;
+    color: white !important;
 }
 
 .css-1cccqvr.css-1cccqvr.css-1cccqvr {
-    color: white;
+    color: white !important;
 }
 
 .css-1utq5rl {
@@ -109,6 +109,11 @@ body {
 
 .MuiDataGrid-row {
     height: 100%;
+}
+
+.css-1si6n65 {
+
+    color: white !important;
 }
 
 
