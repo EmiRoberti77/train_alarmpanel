@@ -154,7 +154,7 @@ export const AlarmsComponentDisplay: React.FC = () => {
        formattedDatetime: formattedDatetime,
       trainduration: item.duration,
       trainstatus: item.name,
-      cssClass7: item.duration > 4 && item.duration < 10  ? 'yellow-row' : '',
+      cssClass7: item.duration > 7 && item.duration < 10  ? 'yellow-row' : '',
       cssClass10: item.duration >10 && item.duration < 15 ? 'orange-row' : '',
       cssClass15: item.duration >15 ? 'red-row' : '',
     };
