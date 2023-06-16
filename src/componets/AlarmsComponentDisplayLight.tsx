@@ -4,7 +4,7 @@ import { DataGrid, GridColDef, GridValueGetterParams, GridCellParams,GridRowPara
 import { IconButton } from '@mui/material';
 import { Delete, Edit, PlayArrow, Visibility } from '@mui/icons-material';
 import { saveAs } from 'file-saver';
-import './css/AlarmComponent.css';
+import './css/AlarmsComponentsDisplayLight.css';
 
 // Interface for data
 interface AlarmData {
@@ -31,66 +31,67 @@ interface RowData {
   thumbnail: string;
   camera: string;
   datetime: string;
+  formattedDatetime: string;
   trainduration: number;
   trainstatus: string;
+  cssClass7?: string;
   cssClass10?: string;
   cssClass15?: string;
 }
 
 // Column definitions for the data grid
 const columns: GridColDef[] = [
-  { field: 'id', headerName: 'No', flex: 0.3 },
-  { field: 'trainid', headerName: 'ID', flex: 0.2 },
-  {
-    field: 'thumbnail',
-    headerName: 'Preview',
-    renderCell: (params) => (
-      <img
-        src={params.value}
-        alt={`Thumbnail ${params.row.id}`}
-        style={{ width: '100%', height: 'auto' }}
-        // ref={(img) => {
-        //   if (img) {
-        //     // Calculate the height of the thumbnail and adjust the row height
-        //     const rowElement = img.closest('.MuiDataGrid-row') as HTMLElement;
-        //     if (rowElement) {
-        //       const thumbnailHeight = img.offsetHeight;
-        //       const currentRowHeight = rowElement.offsetHeight;
-        //       if (thumbnailHeight > currentRowHeight) {
-        //         rowElement.style.height = `${thumbnailHeight}px`;
-        //       }
-        //     }
-        //   }
-        // }}
-      />
-    ),
-    flex: 0.9,
+  { field: 'id', 
+    headerName: 'No', 
+    headerClassName: 'header-style',
+    flex: 0.3, 
   },
-  { field: 'camera', headerName: 'Camera', flex: 0.7 },
-  { field: 'datetime', headerName: 'Arrival Date & Time', flex: 1.7 },
-  { field: 'trainduration', headerName: 'Duration', flex: 0.7 },
+  { field: 'trainid', 
+    headerName: 'ID', 
+    headerClassName: 'header-style',
+    flex: 0.5
+    
+  },
+
+  { field: 'camera', 
+    headerName: 'Camera', 
+    flex: 2,
+    headerClassName: 'header-style',
+    renderCell: (params) => (
+      <div className="main-cell">
+        <span>{params.value}</span>
+      </div>
+    ),
+  },
+  { field: 'trainduration', 
+    headerName: 'Duration', 
+    headerClassName: 'header-style',
+    flex: 0.5,
+    renderCell: (params) => (
+      <div className="main-cell">
+        <span>{params.value}</span>
+      </div>
+    ),
+
+  },
   {
     field: 'trainstatus',
     headerName: 'Status',
     description: 'This column has a value getter and is not sortable.',
     sortable: false,
-    flex: 0.8
+    headerClassName: 'header-style',
+    flex: 0.8,
+    renderCell: (params) => (
+      <div className="main-cell">
+        <span>{params.value}</span>
+      </div>
+    ),
   },
   {
-    field: 'actions',
-    headerName: 'Action',
-    sortable: false,
-    renderCell: (params: GridCellParams) => (
-      <>
-        <IconButton aria-label="Delete">
-          <Delete />
-        </IconButton>
-        <IconButton aria-label="Play">
-          <PlayArrow />
-        </IconButton>
-      </>
-    ),
-    flex: 1
+    field: 'formattedDatetime', 
+    headerName: 'Arrival Date & Time',
+    headerClassName: 'header-style',
+    flex: 0.5,
   },
 ];
 
@@ -104,7 +105,7 @@ export const AlarmsComponentDisplay: React.FC = () => {
 
   const fetchData = async () => {
     const twelveHoursAgo = new Date();
-    twelveHoursAgo.setHours(twelveHoursAgo.getHours() - 2); // set in Hrs
+    twelveHoursAgo.setHours(twelveHoursAgo.getHours() - 24); // set in Hrs
     const formattedDateTime = twelveHoursAgo.toISOString();
 
     const result = await axios.get(endpoint(formattedDateTime));
@@ -121,32 +122,33 @@ export const AlarmsComponentDisplay: React.FC = () => {
     };
   }, []);
 
-  
-  // //Alarm sound Stack
-  // useEffect(() => {
-  //   // Check for duration equal to 0 and play alarm sound
-  //   const alarmData = data.find((item) => item.duration === 0);
-  //   if (alarmData) {
-  //     // Play the alarm sound here
-  //     playAlarmSound();
-  //   }
-  // }, [data]);
 
-  // const playAlarmSound = () => {
-  //   const alarmSound = new Audio('/alarm.wav');
-  //   alarmSound.play();
-  // };
+
 
 
   const rows: RowData[] = data.map((item, index) => {
+
+    const formattedDatetime = new Date(item.datetime).toLocaleString('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    });
+  
+
+
     const row: RowData = {
       id: index + 1,
       trainid: item.object_id,
       thumbnail: item.thumbnail_url,
       camera: item.camera_name,
       datetime: item.datetime,
+       formattedDatetime: formattedDatetime,
       trainduration: item.duration,
       trainstatus: item.name,
+      cssClass7: item.duration > 4 && item.duration < 10  ? 'yellow-row' : '',
       cssClass10: item.duration >10 && item.duration < 15 ? 'orange-row' : '',
       cssClass15: item.duration >15 ? 'red-row' : '',
     };
@@ -165,16 +167,16 @@ export const AlarmsComponentDisplay: React.FC = () => {
     const csvString = [columns.map((column) => column.headerName).join(','), ...csvData].join('\n');
 
     const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8' });
-    saveAs(blob, 'data.csv');
+    saveAs(blob,'Train Detection.csv');
   };
 
   // To adjust Row Height
-  const rowHeight=80;
+  const rowHeight=100;
 
   // Alarm Row Selection
   const getRowClassName = (params: GridRowParams) => {
     const row = params.row as RowData;
-    return row.cssClass10 || row.cssClass15 || '';
+    return row.cssClass10 || row.cssClass15 || row.cssClass7 || '';
   };
   
 
@@ -197,7 +199,6 @@ export const AlarmsComponentDisplay: React.FC = () => {
           },
         }}
         pageSizeOptions={[5, 10]}
-        checkboxSelection
       />
     </div>
   );
