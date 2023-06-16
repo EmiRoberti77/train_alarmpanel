@@ -19,17 +19,43 @@ body {
 }
 
 
+/* Connection  status indicator */
+
+.connected {
+    background-color: green;
+}
+
+.disconnected {
+    background-color: red;
+}
 
 
 
 
-/* If need to switch to light mode just comment the top manuelly as for now */
+.top-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.status-bar {
+    width: 250px;
+    height: 20px;
+    margin-bottom: 1rem;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px !important;
+    text-align: center;
+    font-weight: bold;
+}
 
 .buttonContainer {
-
     padding: 0.5rem 1rem;
     border: none;
-
+    justify-content: flex-start;
+    margin-bottom: 1rem;
 }
 
 .button {

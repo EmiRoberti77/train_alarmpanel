@@ -102,14 +102,20 @@ export const AlarmsComponentDisplay: React.FC = () => {
   const [data, setData] = useState<AlarmData[]>([]);
   const [datetime, setDatetime] = useState<string>('');
   const gridRef = useRef<HTMLDivElement>(null);
+  const [isConnected, setIsConnected] = useState<boolean>(true); // Added state for network status
 
   const fetchData = async () => {
-    const twelveHoursAgo = new Date();
-    twelveHoursAgo.setHours(twelveHoursAgo.getHours() - 24); // set in Hrs
-    const formattedDateTime = twelveHoursAgo.toISOString();
+    try {
+      const twelveHoursAgo = new Date();
+      twelveHoursAgo.setHours(twelveHoursAgo.getHours() - 24); // set in Hrs
+      const formattedDateTime = twelveHoursAgo.toISOString();
 
-    const result = await axios.get(endpoint(formattedDateTime));
-    setData(result.data);
+      const result = await axios.get(endpoint(formattedDateTime));
+      setData(result.data);
+      setIsConnected(true); // Set network status to connected
+    } catch (error) {
+      setIsConnected(false); // Set network status to not connected
+    }
   };
 
 
@@ -181,11 +187,14 @@ export const AlarmsComponentDisplay: React.FC = () => {
   
 
   return (
-    <div>
-      <div className="buttonContainer" style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1rem', marginTop: '1rem' }}>
+    <div >
+      <div className='top-container'>
+      <div className="status-bar" style={{ backgroundColor: isConnected ? 'green' : 'red' }}>Network Status</div>
+      <div className="buttonContainer">
         <button className="button" onClick={handleExportCsv}>
           Export as CSV
         </button>
+      </div>
       </div>
 
       <DataGrid
