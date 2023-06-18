@@ -1,0 +1,219 @@
+/* For Dark mode */
+
+body {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    font-size: 2rem;
+}
+
+
+.header-style {
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+.main-cell {
+    font-weight: bold;
+    font-size: 3rem;
+    text-align: center;
+}
+
+
+/* Connection  status indicator */
+
+.connected {
+    background-color: green;
+}
+
+.disconnected {
+    background-color: red;
+}
+
+
+
+
+.top-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.status-bar {
+    width: 250px;
+    height: 20px;
+    margin-bottom: 1rem;
+    margin-left: 1rem;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px !important;
+    text-align: center;
+    font-weight: bold;
+}
+
+.buttonContainer {
+    padding: 0.5rem 1rem;
+    border: none;
+    justify-content: flex-start;
+    margin-bottom: 1rem;
+}
+
+.button {
+    background-color: #4caf50;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #45a049;
+}
+
+.button:active {
+    background-color: #3d8b3d;
+}
+
+
+.MuiDataGrid-row {
+    height: 100%;
+}
+
+.css-1si6n65 {
+
+    color: white !important;
+}
+
+
+@keyframes blink-red {
+    0% {
+        background-color: rgba(255, 0, 0, 0);
+    }
+
+    50% {
+        background-color: rgb(228, 32, 32);
+    }
+
+    100% {
+        background-color: rgba(255, 0, 0, 0);
+    }
+}
+
+@keyframes blink-orange {
+    0% {
+        background-color: rgba(221, 118, 54, 0);
+    }
+
+    50% {
+        background-color: rgb(226, 105, 13);
+    }
+
+    100% {
+        background-color: rgba(221, 118, 54, 0);
+    }
+}
+
+@keyframes blink-yellow {
+    0% {
+        background-color: rgba(221, 202, 54, 0);
+    }
+
+    50% {
+        background-color: rgb(251, 255, 0);
+    }
+
+    100% {
+        background-color: rgba(221, 202, 54, 0);
+    }
+}
+
+.red-row {
+    animation: blink-red 1s infinite, stay-red 5s forwards 5s;
+    /* Set the initial blinking animation and add another animation to make it stay on the final color */
+    animation-duration: 1s;
+}
+
+.orange-row {
+    animation: blink-orange 1s infinite, stay-orange 5s forwards 5s;
+    /* Set the initial blinking animation and add another animation to make it stay on the final color */
+    animation-duration: 1s;
+    background-color: rgb(221, 118, 54);
+}
+
+.yellow-row {
+    animation: blink-yellow 1s infinite, stay-yellow 5s forwards 5s;
+    /* Set the initial blinking animation and add another animation to make it stay on the final color */
+    animation-duration: 1s;
+    background-color: rgb(221, 202, 54);
+}
+
+@keyframes stay-red {
+    0% {
+        background-color: rgb(228, 32, 32);
+    }
+
+    100% {
+        background-color: rgb(228, 32, 32);
+    }
+}
+
+@keyframes stay-orange {
+    0% {
+        background-color: rgb(226, 105, 13);
+    }
+
+    100% {
+        background-color: rgb(226, 105, 13);
+    }
+}
+
+@keyframes stay-yellow {
+    0% {
+        background-color: rgb(251, 255, 0);
+    }
+
+    100% {
+        background-color: rgb(251, 255, 0);
+    }
+}
+
+.css-wop1k0-MuiDataGrid-footerContainer {
+    font-size: 1rem !important;
+    font-weight: normal;
+}
+
+/* now in test  */
+/* For desktop */
+.data-grid {
+    width: 100%;
+    height: 400px;
+    /* Adjust the height according to your requirements */
+}
+
+/* For tablets */
+@media (max-width: 1024px) {
+    .data-grid {
+        height: 300px;
+        /* Adjust the height according to your requirements */
+    }
+
+    .main-cell {
+        font-weight: bold;
+        font-size: 2rem;
+    }
+}
+
+/* For mobile */
+@media (max-width: 768px) {
+    .data-grid {
+        height: 200px;
+        /* Adjust the height according to your requirements */
+    }
+
+    .main-cell {
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+
+}

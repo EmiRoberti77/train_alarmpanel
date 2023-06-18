@@ -6,8 +6,8 @@ import { AlarmsComponentDisplay } from './componets/AlarmsComponentDisplayLight'
 function App() {
   return (
     <div className="App">
-      <AlarmsComponent />
-      {/* <AlarmsComponentDisplay/> */}
+      {/* <AlarmsComponent /> */}
+      <AlarmsComponentDisplay/>
     </div>
   );
   //emi
