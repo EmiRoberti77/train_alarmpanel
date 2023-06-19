@@ -49,7 +49,7 @@ const columns: GridColDef[] = [
   { field: 'trainid', 
     headerName: 'ID', 
     headerClassName: 'header-style',
-    flex: 0.5
+    flex: 0.3
     
   },
 
@@ -107,7 +107,7 @@ export const AlarmsComponentDisplay: React.FC = () => {
   const fetchData = async () => {
     try {
       const twelveHoursAgo = new Date();
-      twelveHoursAgo.setHours(twelveHoursAgo.getHours() - 24); // set in Hrs
+      twelveHoursAgo.setHours(twelveHoursAgo.getHours() - 12); // set in Hrs
       const formattedDateTime = twelveHoursAgo.toISOString();
 
       const result = await axios.get(endpoint(formattedDateTime));
@@ -154,7 +154,7 @@ export const AlarmsComponentDisplay: React.FC = () => {
        formattedDatetime: formattedDatetime,
       trainduration: item.duration,
       trainstatus: item.name,
-      cssClass7: item.duration > 7 && item.duration < 10  ? 'yellow-row' : '',
+      cssClass7: item.duration > 4 && item.duration < 10  ? 'yellow-row' : '',
       cssClass10: item.duration >10 && item.duration < 15 ? 'orange-row' : '',
       cssClass15: item.duration >15 ? 'red-row' : '',
     };
